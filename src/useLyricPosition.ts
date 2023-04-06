@@ -47,7 +47,7 @@ export function useLyricPosition(speed: number = 0.01) {
           relative - (relative - 1) / 1000 * tryTimes
         );
       } else x = Math.random() * (window.innerWidth - fontSize * 16);
-      y = window.innerHeight * 0.1 + Math.random() * heightArea + speed * time;
+      y = window.innerHeight * 0.1 + (1 - Math.pow(Math.random(), 5)) * heightArea + speed * time;
       isOverlap = lyricPositions.some((position) => {
         const isXOverlap = position.x - x < (fontSize ?? 1.5) * 20 && x - position.x < position.fontSize * 20;
         const isYOverlap = (y - position.y - position.length * (position.fontSize * 16 * 1.18)) < 6 && (position.y - y - length * ((fontSize ?? 1.5) * 16 * 1.18)) < 6;

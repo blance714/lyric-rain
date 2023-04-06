@@ -5,7 +5,6 @@ import "./LyricsShower.css";
 import { LyricLine } from "./LyricLine";
 import { useLyricPosition } from "./useLyricPosition";
 import styled from "styled-components";
-import inochiMp3 from "./assets/inochi.mp3"
 import { Lyric } from "./lyricData";
 
 const LyricsWrapper = styled.div`
@@ -33,9 +32,12 @@ const AudioContainer = styled.div`
   }
 `
 
-function LyricsShower({ lyrics, speed }: {
+function LyricsShower({ lyrics, audioSrc, speed, gap, milliPerChar }: {
   lyrics: Lyric[],
-  speed: number
+  audioSrc: string,
+  speed: number,
+  gap?: number,
+  milliPerChar?: number,
 }) {
   const { getPosition } = useLyricPosition(speed);
   const beginTimeRef = useRef(0);
@@ -76,13 +78,14 @@ function LyricsShower({ lyrics, speed }: {
             beginTime={lyric.time}
             getPosition={() => getPosition(lyric, index)}
             fontSize={lyric.fontSize}
+            gap={gap} milliPerChar={milliPerChar}
           >
             {lyric.text}
           </LyricLine>
         ))}
       </LyricsContainer>
       <AudioContainer>
-        <audio ref={audioRef} src={inochiMp3} controls />
+        <audio ref={audioRef} src={audioSrc} controls />
       </AudioContainer>
     </LyricsWrapper>
   );

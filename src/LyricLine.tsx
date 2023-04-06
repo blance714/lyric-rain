@@ -14,22 +14,26 @@ const LyricBlock = styled.div`
   white-space: nowrap;
 `;
 
-const gap = 175;
 export function LyricLine({
   nowTime,
   beginTime,
   getPosition,
   fontSize,
+  gap,
+  milliPerChar,
   children,
 }: {
   nowTime: number;
   beginTime: number;
   getPosition: () => { x: number; y: number };
   fontSize?: number;
+  gap?: number;
+  milliPerChar?: number;
   children: string;
 }) {
   const time = nowTime - beginTime;
   const position = useMemo(() => getPosition(), []);
+  gap = gap ?? 175;
 
   let endTime = beginTime + gap * children.length;
   return (
@@ -44,9 +48,9 @@ export function LyricLine({
         ? children.split("").map((character, index) => (
             <LyricCharacter
               nowTime={time}
-              beginTime={index * gap}
-              endTime={(index + 1) * gap}
-              speed={40}
+              beginTime={index * (gap ?? 175)}
+              endTime={(index + 1) * (gap ?? 175)}
+              speed={milliPerChar ?? 40}
               key={index}
             >
               {character}
