@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { LyricCharacter } from "./LyricCharacter";
 import { useMemo, useState } from "react";
-import { useLyricPosition } from "./useLyricPosition";
+import { LyricData, useLyrics } from "./useLyricPosition";
 
 const LyricBlock = styled.div`
   position: absolute;
@@ -15,39 +15,32 @@ const LyricBlock = styled.div`
 `;
 
 export function LyricLine({
-  nowTime,
-  beginTime,
-  getPosition,
-  fontSize,
+  audioTime,
+  lyricData,
   gap,
   milliPerChar,
-  children,
 }: {
-  nowTime: number;
-  beginTime: number;
-  getPosition: () => { x: number; y: number };
-  fontSize?: number;
+  audioTime: number;
+  lyricData: LyricData;
   gap?: number;
   milliPerChar?: number;
-  children: string;
 }) {
-  const time = nowTime - beginTime;
-  const position = useMemo(() => getPosition(), []);
+  const { time, text, fontSize, x, y } = lyricData;
+  const localTime = audioTime - time;
   gap = gap ?? 175;
 
-  let endTime = beginTime + gap * children.length;
+  let endTime = time + gap * text.length;
   return (
     <LyricBlock style={{
-      left: position.x, top: position.y,
+      left: x, top: y,
       fontSize: `${fontSize ?? 1.5}rem`,
       letterSpacing: `${(fontSize ?? 1.5) * 0.18}rem`,
       }}>
-      {nowTime < beginTime
-        ? ""
-        : nowTime < endTime
-        ? children.split("").map((character, index) => (
+      {audioTime < time ? ""
+        : audioTime < endTime
+        ? text.split("").map((character, index) => (
             <LyricCharacter
-              nowTime={time}
+              nowTime={localTime}
               beginTime={index * (gap ?? 175)}
               endTime={(index + 1) * (gap ?? 175)}
               speed={milliPerChar ?? 40}
@@ -56,7 +49,7 @@ export function LyricLine({
               {character}
             </LyricCharacter>
           ))
-        : children}
+        : text}
     </LyricBlock>
   );
 }

@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./LyricsShower.css";
 import { LyricLine } from "./LyricLine";
-import { useLyricPosition } from "./useLyricPosition";
+import { useLyrics } from "./useLyricPosition";
 import styled from "styled-components";
-import { Lyric } from "./lyricData";
 
 const LyricsWrapper = styled.div`
   width: 100vw;
@@ -32,14 +28,15 @@ const AudioContainer = styled.div`
   }
 `
 
-function LyricsShower({ lyrics, audioSrc, speed, gap, milliPerChar }: {
-  lyrics: Lyric[],
+function LyricsShower({ lyricStr, audioSrc, speed, gap, milliPerChar, timeOffset }: {
+  lyricStr: string,
   audioSrc: string,
   speed: number,
   gap?: number,
   milliPerChar?: number,
+  timeOffset?: number
 }) {
-  const { getPosition } = useLyricPosition(speed);
+  const { lyricDatas } = useLyrics(lyricStr, speed, timeOffset);
   const beginTimeRef = useRef(0);
   const [nowTime, setNowTime] = useState(0);
   const isPlayingRef = useRef(false);
@@ -72,16 +69,11 @@ function LyricsShower({ lyrics, audioSrc, speed, gap, milliPerChar }: {
   return (
     <LyricsWrapper>
       <LyricsContainer style={{ top: -time * speed }}>
-        {lyrics.map((lyric, index) => (
+        {lyricDatas.map(lyric => (
           <LyricLine
-            nowTime={time}
-            beginTime={lyric.time}
-            getPosition={() => getPosition(lyric, index)}
-            fontSize={lyric.fontSize}
+            audioTime={time} lyricData={lyric}
             gap={gap} milliPerChar={milliPerChar}
-          >
-            {lyric.text}
-          </LyricLine>
+          />
         ))}
       </LyricsContainer>
       <AudioContainer>

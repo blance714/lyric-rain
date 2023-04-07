@@ -1,19 +1,4 @@
-function parseLrc(text: string, offset: number = 0) {
-  return text
-    .split("\n")
-    .map((string) => string.match(/\[(.*):(.*)\](?:<s:(.*?)>)?(?:<r:(.*?)>)?(.*)/))
-    .filter(Boolean)
-    .map(match => (console.log(match), match))
-    .map((match): Lyric => ({
-      time: (parseFloat(match![1]) * 60 + parseFloat(match![2])) * 1000 + offset,
-      text: match![5],
-      fontSize: match![3] ? parseFloat(match![3]) : undefined,
-      relative: match![4] ? parseFloat(match![4]) : undefined,
-    }))
-    .map(match => (console.log(match), match));
-}
-
-const lyrics = parseLrc(`
+const lyrics = `
 [00:11.00]<s:3>命に嫌われている。
 [00:13.50] 作曲 : カンザキイオリ
 [00:15.50] 作词 : カンザキイオリ
@@ -105,9 +90,9 @@ const lyrics = parseLrc(`
 [03:40.03]<s:6><r:4>生きて、
 [03:40.59]<s:6><r:4>生きて、
 [03:41.09]<s:6><r:4>生きて、
-[03:41.87]<s:6><r:4>生きろ。`)
+[03:41.87]<s:6><r:4>生きろ。`;
 
-const chineseLyrics = parseLrc(`
+const chineseLyrics = `
 [00:10.00]<s:3>被生命所厌恶。
 [00:12.00] 作曲 : カンザキイオリ
 [00:14.00] 作词 : カンザキイオリ
@@ -198,9 +183,9 @@ const chineseLyrics = parseLrc(`
 [03:40.03]<s:6><r:4>活着、
 [03:40.59]<s:6><r:4>活着、
 [03:41.09]<s:6><r:4>活着、
-[03:41.87]<s:6><r:4>活下去。`)
+[03:41.87]<s:6><r:4>活下去。`;
 
-const jigokuLyrics = parseLrc(`
+const jigokuLyrics = `
 [00:00.000]作词 : カンザキイオリ
 [00:01.000]作曲 : カンザキイオリ
 [00:02.000]编曲 : カンザキイオリ
@@ -252,9 +237,9 @@ const jigokuLyrics = parseLrc(`
 [03:35.419]幸せなんてとうの昔に青さと消えた
 [03:40.784]笑ってくれよ
 [03:42.761]許してくれよ　今すぐに
-`, 1200);
+`;
 
-const smkniLyrics = parseLrc(`
+const smkniLyrics = `
 [00:00.00]死ぬにはいい日だった
 [00:05.00]作曲 :ピコン (Picon)
 [00:10.00]演唱 :初音ミク (初音未来)
@@ -288,13 +273,6 @@ const smkniLyrics = parseLrc(`
 [03:55.90]涙が零れたあなたに触れて
 [04:07.83]さよなら
 [04:10.61]忘れて生きていたい惨めなまま
-`);
+`;
 
 export { lyrics, chineseLyrics, jigokuLyrics, smkniLyrics };
-
-export interface Lyric {
-  time: number;
-  text: string;
-  fontSize?: number;
-  relative?: number;
-}
